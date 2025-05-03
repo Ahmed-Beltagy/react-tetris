@@ -1,5 +1,8 @@
 import { SET_THEME, ThemeLight, ThemeDark, ThemeStorageKey } from '../../unit/const'; // Adjust path if needed
 
+import { SET_THEME } from '../../unit/reducerType'; // Correct the import source
+import { ThemeLight, ThemeDark, ThemeStorageKey } from '../../unit/const';
+
 // Function to get initial theme from localStorage or default to light
 const getInitialTheme = () => {
   try {

@@ -49,13 +49,22 @@ body{
 @dark-bg: #282c34;
 @dark-text: #fff;
 
-.app{
-  // Default (Light Theme) styles
-  background: @light-bg;
-  color: @light-text; // Default text color for the app
+// Define top-level classes for CSS Modules export
+.themeLight {}
+.themeDark {}
 
-  // Dark Theme specific styles
-  &.themeDark { // Target the .themeDark class added by the component
+.app{
+  // Apply theme styles based on the presence of .themeLight or .themeDark class
+
+  // Default (Light Theme) styles applied when .themeLight is present or as fallback
+  &.themeLight {
+    background: @light-bg;
+    color: @light-text; // Default text color for the app
+    // Add specific light theme overrides here if needed
+  }
+
+  // Dark Theme specific styles applied when .themeDark is present
+  &.themeDark {
     background: @dark-bg;
     color: @dark-text;
 
@@ -73,11 +82,11 @@ body{
     // Add more specific overrides for other elements (buttons, text, etc.) here
   }
 
-  // Light Theme specific styles (can be omitted if defaults are light)
-  // &.themeLight {
-  //   background: @light-bg;
-  //   color: @light-text;
-  // }
+  // Ensure default styles are set if neither class is present initially,
+  // although the JS logic should always add one.
+  // If needed, set base styles directly on .app outside of theme classes.
+  // background: @light-bg; // Example: Set default directly on .app
+  // color: @light-text;   // Example: Set default directly on .app
 
 
   width: 640px;
