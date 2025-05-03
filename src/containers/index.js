@@ -39,21 +39,25 @@ class App extends React.Component {
   }
 
   componentDidMount() { // Changed from componentWillMount to componentDidMount for listeners
+    // Add resize listener
     window.addEventListener('resize', this.resize, true);
-  componentDidMount() {
+
+    // Add visibility change listener
     if (visibilityChangeEvent) { // 将页面的焦点变换写入store
-      document.addEventListener(visibilityChangeEvent, () => {
+      this.visibilityListener = () => { // Store listener reference for removal
         states.focus(isFocus());
-      }, false);
+      };
+      document.addEventListener(visibilityChangeEvent, this.visibilityListener, false);
     }
 
+    // Handle loading previous game state
     if (lastRecord) { // 读取记录
       if (lastRecord.cur && !lastRecord.pause) { // 拿到上一次游戏的状态, 如果在游戏中且没有暂停, 游戏继续
         const speedRun = this.props.speedRun;
         let timeout = speeds[speedRun - 1] / 2; // 继续时, 给予当前下落速度一半的停留时间
         // 停留时间不小于最快速的速度
-        timeout = speedRun < speeds[speeds.length - 1] ? speeds[speeds.length - 1] : speedRun;
-        states.auto(timeout);
+        timeout = speedRun < speeds[speeds.length - 1] ? speeds[speeds.length - 1] : speedRun; // This logic seems potentially incorrect, timeout should likely be speedRun index, not value
+        states.auto(timeout); // Consider reviewing the timeout calculation logic based on speeds array index vs value
       }
       if (!lastRecord.cur) {
         states.overStart();
@@ -65,9 +69,9 @@ class App extends React.Component {
 
   componentWillUnmount() { // Add cleanup for listeners
     window.removeEventListener('resize', this.resize, true);
-    if (visibilityChangeEvent) {
-      // Consider removing the visibility change listener here if added in componentDidMount
-      // document.removeEventListener(visibilityChangeEvent, ...);
+    // Remove visibility change listener using the stored reference
+    if (this.visibilityListener) {
+      document.removeEventListener(visibilityChangeEvent, this.visibilityListener, false);
     }
   }
 
@@ -168,7 +172,7 @@ App.propTypes = {
   matrix: propTypes.object.isRequired,
   next: propTypes.string.isRequired,
   cur: propTypes.object,
-  dispatch: propTypes.func.isRequired,
+  // dispatch: propTypes.func.isRequired, // Removed - not used directly
   speedStart: propTypes.number.isRequired,
   speedRun: propTypes.number.isRequired,
   startLines: propTypes.number.isRequired,
