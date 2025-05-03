@@ -6,10 +6,16 @@ import { setTheme } from '../../actions'; // Assuming setTheme action creator ex
 import style from './index.less';                                                                                                                                                             
                                                                                                                                                                                               
 class ThemeSwitcher extends React.Component {                                                                                                                                                 
-  toggleTheme = () => {                                                                                                                                                                       
+  constructor(props) {                                                                                                                                                                        
+    super(props);                                                                                                                                                                             
+    // Bind 'this' for the toggleTheme method                                                                                                                                                 
+    this.toggleTheme = this.toggleTheme.bind(this);                                                                                                                                           
+  }                                                                                                                                                                                           
+                                                                                                                                                                                              
+  toggleTheme() { // Standard class method syntax                                                                                                                                             
     const nextTheme = this.props.currentTheme === ThemeLight ? ThemeDark : ThemeLight;                                                                                                        
     this.props.setTheme(nextTheme);                                                                                                                                                           
-  };                                                                                                                                                                                          
+  }                                                                                                                                                                                           
                                                                                                                                                                                               
   render() {                                                                                                                                                                                  
     const isDarkMode = this.props.currentTheme === ThemeDark;                                                                                                                                 
