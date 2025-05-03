@@ -14,6 +14,7 @@ const getInitialTheme = () => {
 };
 
 const initialState = getInitialTheme(); // Calculate initial state once
+console.log('Initial theme state calculated:', initialState); // Add this log
 
 const theme = (state = initialState, action) => { // Use default parameter for initial state
   // No need for explicit undefined check when using default parameter
