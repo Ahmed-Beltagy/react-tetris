@@ -122,6 +122,7 @@ class App extends React.Component {
     // Determine the theme class based on the Redux state
     const themeClass = theme === ThemeDark ? style.themeDark : style.themeLight;
     // Or if using global classes: const themeClass = `theme-${theme}`;
+    console.log('[App Container] Rendering. Theme prop:', theme, 'Calculated themeClass:', themeClass);
 
     return (
       // Apply the theme class to the main container div

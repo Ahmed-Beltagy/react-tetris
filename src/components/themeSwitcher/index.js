@@ -13,8 +13,11 @@ class ThemeSwitcher extends React.Component {
   }
 
   toggleTheme() { // Standard class method syntax
+    console.log('[ThemeSwitcher] toggleTheme called. Current theme:', this.props.currentTheme);
     const nextTheme = this.props.currentTheme === ThemeLight ? ThemeDark : ThemeLight;
+    console.log('[ThemeSwitcher] Calculated next theme:', nextTheme);
     this.props.setTheme(nextTheme);
+    console.log('[ThemeSwitcher] setTheme action dispatched.');
   }
 
   render() {

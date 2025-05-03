@@ -21,9 +21,12 @@ const theme = (state = initialState, action) => { // Use default parameter for i
 
   switch (action.type) {
     case SET_THEME: {
+      console.log('[Reducer theme] Received SET_THEME action. Payload:', action.data);
       const newTheme = action.data === ThemeDark ? ThemeDark : ThemeLight;
+      console.log('[Reducer theme] Calculated newTheme:', newTheme, 'Current state:', state);
       try {
         localStorage.setItem(ThemeStorageKey, newTheme);
+        console.log('[Reducer theme] Saved to localStorage:', newTheme);
       } catch (e) {
         console.error('Could not save theme to localStorage', e);
       }
