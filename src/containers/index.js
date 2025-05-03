@@ -14,13 +14,13 @@ import Pause from '../components/pause';
 import Point from '../components/point';
 import Logo from '../components/logo';
 import Keyboard from '../components/keyboard';
-import Guide from '../components/guide';
-import ThemeSwitcher from '../components/themeSwitcher'; // Import the switcher
-import { transform, lastRecord, speeds, i18n, lan, ThemeLight, ThemeDark } from '../unit/const'; // Import theme constants
+// import Guide from '../components/guide'; // Removed unused import
+import ThemeSwitcher from '../components/themeSwitcher/index'; // Corrected import path
+import { transform, lastRecord, speeds, i18n, lan, ThemeDark } from '../unit/const'; // Removed ThemeLight, Import theme constants
 import { visibilityChangeEvent, isFocus } from '../unit/';
 import states from '../control/states';
 // Assuming actions are exported like this, adjust if necessary
-import * as actions from '../actions';
+// import * as actions from '../actions'; // Removed unused import
 
 class App extends React.Component {
   constructor() {
@@ -31,13 +31,6 @@ class App extends React.Component {
     };
     // Bind 'this' for the resize method
     this.resize = this.resize.bind(this);
-  }
-
-  resize() { // Standard class method syntax
-    this.setState({
-      w: document.documentElement.clientWidth,
-      h: document.documentElement.clientHeight,
-    });
   }
 
   componentDidMount() {
@@ -75,6 +68,14 @@ class App extends React.Component {
     if (this.visibilityListener) {
       document.removeEventListener(visibilityChangeEvent, this.visibilityListener, false);
     }
+  }
+
+  // Moved resize method here to satisfy react/sort-comp
+  resize() {
+    this.setState({
+      w: document.documentElement.clientWidth,
+      h: document.documentElement.clientHeight,
+    });
   }
 
   render() {
