@@ -15,11 +15,8 @@ const getInitialTheme = () => {
 
 const initialState = getInitialTheme(); // Calculate initial state once
 
-const theme = (state, action) => { // Remove default parameter assignment from here
-  // Explicitly handle the initial state when state is undefined
-  if (state === undefined) {
-    return initialState; // Return the calculated initial state during initialization
-  }
+const theme = (state = initialState, action) => { // Use default parameter for initial state
+  // No need for explicit undefined check when using default parameter
 
   switch (action.type) {
     case SET_THEME: {
