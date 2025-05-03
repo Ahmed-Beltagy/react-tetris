@@ -156,8 +156,8 @@ class App extends React.Component {
                   <Pause data={pauseState} />
                   <Number time />
                 </div>
-                 {/* Render the theme switcher */}
-                 <ThemeSwitcher />
+                {/* Render the theme switcher */}
+                <ThemeSwitcher />
               </div>
             </div>
           </div>
