@@ -43,8 +43,43 @@ body{
   user-select: none;
 }
 
+// Define theme variables (optional but recommended)
+@light-bg: #efcc19;
+@light-text: #000;
+@dark-bg: #282c34;
+@dark-text: #fff;
 
 .app{
+  // Default (Light Theme) styles
+  background: @light-bg;
+  color: @light-text; // Default text color for the app
+
+  // Dark Theme specific styles
+  &.themeDark { // Target the .themeDark class added by the component
+    background: @dark-bg;
+    color: @dark-text;
+
+    // Example: Adjust nested component colors for dark mode
+    .screen {
+      border-color: #555 #ccc #ccc #555; // Darker border for screen
+      .panel {
+        background: #4a4e5a; // Darker panel background
+        border-color: #222; // Darker panel border
+      }
+    }
+    .rect {
+       border-color: @dark-text; // Adjust rect border color
+    }
+    // Add more specific overrides for other elements (buttons, text, etc.) here
+  }
+
+  // Light Theme specific styles (can be omitted if defaults are light)
+  // &.themeLight {
+  //   background: @light-bg;
+  //   color: @light-text;
+  // }
+
+
   width: 640px;
   padding-top: 42px;
   box-shadow: 0 0 10px #fff inset;
