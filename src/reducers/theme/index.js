@@ -4,8 +4,8 @@ import { SET_THEME, ThemeLight, ThemeDark, ThemeStorageKey } from '../../unit/co
 const getInitialTheme = () => {
   try {
     const storedTheme = localStorage.getItem(ThemeStorageKey);
-       if (storedTheme === ThemeLight || storedTheme === ThemeDark) {                                                                                                                         
-         return storedTheme;                                                                                                                                                                  
+    if (storedTheme === ThemeLight || storedTheme === ThemeDark) {
+      return storedTheme;
     }
   } catch (e) {
     console.error('Could not read theme from localStorage', e); // Use single quotes
