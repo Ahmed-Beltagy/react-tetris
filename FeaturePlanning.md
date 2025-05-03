@@ -45,54 +45,54 @@ This document outlines the planning for two new features to be added to the Reac
 
 ---
 
-## Feature 2: Hold Piece
+## Feature 2: Dark Mode Theme
 
 ### User Story
 
-*   **As a player, I want to press a designated 'Hold' key (e.g., Shift or C) to swap the currently falling tetromino with one stored in a 'Hold' area. If the Hold area is empty, the current piece moves there, and the next piece from the queue starts falling. I should only be able to perform this swap once per falling piece, so I can strategically save useful pieces for later or temporarily set aside difficult ones.**
+*   **As a player, I want to be able to toggle between a standard light theme and a dark mode theme for the game interface, so that I can choose the appearance that is more comfortable for my eyes, especially in different lighting conditions.**
 
-### Technical Requirements
+### Technical Requirements (Implemented)
 
 1.  **State Management (Redux):**
-    *   Add a new state slice `heldPiece` (reducer: `src/reducers/heldPiece/index.js`) to store the *type* of the piece in the hold area (e.g., 'I', 'L', 'T', or `null` if empty). Initial state: `null`.
-    *   Add a new state slice `canSwap` (reducer: `src/reducers/canSwap/index.js`) to store a boolean flag indicating if the hold action is currently allowed. Initial state: `true`.
+    *   Added a `theme` state slice (`src/reducers/theme/index.js`) storing the current theme ('light' or 'dark').
+    *   Initial state is determined by checking `localStorage` (`REACT_TETRIS_THEME` key) or defaulting to 'light'.
 2.  **Actions:**
-    *   Define a new action type `HOLD_PIECE` in `src/actions/index.js`.
-    *   Define a new action type `SET_CAN_SWAP` in `src/actions/index.js`.
-    *   Define a keyboard-specific action `KEY_HOLD` in `src/actions/keyboard.js`.
-3.  **Reducers:**
-    *   Implement the `heldPiece` reducer: On `HOLD_PIECE`, it updates the stored type based on the current `cur` piece and the previous `heldPiece` state.
-    *   Implement the `canSwap` reducer: Sets to `false` on `HOLD_PIECE`, sets to `true` via `SET_CAN_SWAP` action.
-    *   Modify the `cur` reducer: On `HOLD_PIECE`, it should either become `null` (if hold was empty, triggering next piece) or become a new `Block` instance based on the previously held piece type.
-    *   Modify the `next` reducer (potentially): If holding when the reserve is empty, the game needs to pull the *next* piece from the queue to become the new `cur`. Ensure this interaction is handled correctly.
-4.  **Game Logic / Control:**
-    *   Implement a new key handler (e.g., `src/control/todo/hold.js`) for the designated Hold key.
-    *   This handler checks if `getState().get('canSwap')` is `true`.
-    *   If true, it dispatches the `HOLD_PIECE` action.
-    *   Modify the game logic where a piece locks and the next piece is spawned (`src/control/states.js` - likely within `nextAround` or related logic): Dispatch `actions.setCanSwap(true)` at this point.
-5.  **UI Component:**
-    *   Create a new React component `src/components/hold/index.js`.
-    *   This component will display the tetromino shape corresponding to the `heldPiece` type stored in the Redux state (similar to the `Next` component).
-    *   Style the component appropriately (e.g., using CSS in `src/components/hold/index.css`).
-    *   Integrate this `Hold` component into the main UI layout in `src/containers/index.js`.
+    *   Defined `SET_THEME` action type in `src/unit/reducerType.js`.
+    *   Created `setTheme(theme)` action creator in `src/actions/index.js`.
+3.  **Reducer:**
+    *   Implemented the `theme` reducer to handle the `SET_THEME` action.
+    *   Updates the state with the new theme ('light' or 'dark').
+    *   Persists the chosen theme to `localStorage` on change.
+4.  **UI Component (Theme Switcher):**
+    *   Created `ThemeSwitcher` component (`src/components/themeSwitcher/index.js`).
+    *   Displays a button with an icon (☀️/🌙) indicating the current mode and action.
+    *   Connects to Redux state (`theme`) via `mapStateToProps`.
+    *   Dispatches the `setTheme` action on click via `mapDispatchToProps`.
+    *   Styled using CSS Modules (`src/components/themeSwitcher/index.less`), positioned fixed in the top-right corner.
+5.  **Applying the Theme:**
+    *   The main `App` container (`src/containers/index.js`) connects to the `theme` state.
+    *   It dynamically adds a theme-specific CSS Modules class (`style.themeLight` or `style.themeDark`) to the root `div.app` element based on the current theme state.
+6.  **Styling (Less with CSS Modules):**
+    *   Defined base light theme styles in `src/containers/index.less`.
+    *   Added specific dark mode overrides within `src/containers/index.less` targeting `.app.themeDark`. This includes background, text colors, panel colors, and Tetris block colors (moving vs. locked).
+    *   Added dark mode overrides for the `ThemeSwitcher` button in `src/components/themeSwitcher/index.less`.
+    *   Added dark mode overrides for the keyboard buttons in `src/components/keyboard/button/index.less` using `:global(.themeDark)` descendant selectors.
 
-### Files May Need Change
+### Files Changed
 
-*   `src/reducers/index.js`: To add the new `heldPiece` and `canSwap` reducers.
-*   `src/reducers/`: Add new directories/files `heldPiece/index.js` and `canSwap/index.js`.
-*   `src/reducers/cur/index.js`: Modify to handle the `HOLD_PIECE` action logic.
-*   `src/reducers/next/index.js`: Potentially modify depending on how the next piece is handled after a hold action.
-*   `src/actions/index.js`: Add `HOLD_PIECE`, `SET_CAN_SWAP` action types and creators.
-*   `src/actions/keyboard.js`: Add `KEY_HOLD` action type and creator.
-*   `src/control/states.js`: Modify piece locking/spawning logic to dispatch `SET_CAN_SWAP(true)`. Handle the logic flow for swapping (getting next piece if hold was empty).
-*   `src/control/todo/`: Add a new file like `hold.js` for the key press/release handler.
-*   `src/control/index.js`: Register the new hold key handler.
-*   `src/components/`: Add new directory/files for the `Hold` component (`Hold/index.js`, `Hold/index.css`).
-*   `src/containers/index.js`: Import and render the `Hold` component, connecting it to the `heldPiece` state.
-*   `src/unit/const.js` (or key mapping config): Define the key code/name for the Hold action.
+*   `src/reducers/index.js`: Added `theme` reducer to `combineReducers`.
+*   `src/reducers/theme/index.js`: New file created for the theme reducer logic and localStorage interaction.
+*   `src/actions/index.js`: Added `setTheme` action creator and exported it.
+*   `src/unit/reducerType.js`: Added `SET_THEME` constant.
+*   `src/unit/const.js`: Added `ThemeLight`, `ThemeDark`, `ThemeStorageKey` constants.
+*   `src/components/themeSwitcher/index.js`: New file for the switcher component.
+*   `src/components/themeSwitcher/index.less`: New file for the switcher component styles.
+*   `src/containers/index.js`: Connected to `theme` state, applied theme class to root element.
+*   `src/containers/index.less`: Added theme variables, `.themeLight`/`.themeDark` class definitions, and specific dark mode style overrides for various elements (app background, text, panels, blocks).
+*   `src/components/keyboard/button/index.less`: Added dark mode style overrides for keyboard buttons.
 
-### Potential Challenges
+### Potential Challenges (Observed/Addressed)
 
-*   **State Transition Complexity:** Ensuring the state updates correctly across `cur`, `heldPiece`, `next`, and `canSwap` during the swap operation is critical. Edge cases like holding the very first piece or rapid key presses need careful handling.
-*   **Game Flow Integration:** Precisely timing the `SET_CAN_SWAP(true)` dispatch is important – it should happen only after the *current* piece has locked and the *next* piece cycle is truly beginning.
-*   **Interaction with `next`:** Defining the exact behavior when the hold area is empty: does the piece currently shown in the "Next" display immediately become the falling piece, or does the game pull a new "Next" piece as well? (Standard behavior is usually the former).
+*   **CSS Specificity:** Ensuring dark mode styles correctly override base styles, sometimes requiring `:global()` selectors or `!important` during debugging due to CSS Modules and rule ordering.
+*   **Styling Consistency:** Manually ensuring all relevant UI elements (text, buttons, backgrounds, blocks) have appropriate colors and contrast in dark mode across different components.
+*   **CSS Modules Interaction:** Correctly targeting elements styled in separate component `.less` files from the global theme class applied in the container (e.g., using `:global(.themeDark) .button`).
