@@ -83,26 +83,20 @@ body{
     // Dark mode styles for Tetris blocks (b tags)
     :global {
       b {
-        // Base block style in dark mode
-        border: 2px solid #666; // Darker border
+        // Base block style in dark mode (gray shadow)
+        border: 2px solid #555; // Slightly darker gray border
         &:after {
-          background: #555; // Darker fill
+          background: #444; // Dark gray fill
         }
       }
-      b.c {
-        // Style for '.c' blocks in dark mode
-        border-color: #4a90e2; // Example: Blue border
+      b.c, b.d { // Apply white style to both active block types
+        // Style for active blocks in dark mode (white)
+        border-color: #ccc; // Light gray border for definition
         &:after {
-          background: #4a90e2; // Example: Blue fill
+          background: #fff; // White fill
         }
       }
-      b.d {
-         // Style for '.d' blocks in dark mode
-        border-color: #e2754a; // Example: Orange border
-        &:after {
-          background: #e2754a; // Example: Orange fill
-        }
-      }
+      // b.d rule is now combined with b.c above, remove the separate rule
     }
 
     // Adjust state panel text color for better readability
