@@ -1,35 +1,38 @@
-// Basic styling for the theme switcher button                                                                                                                                                
-.themeButton {                                                                                                                                                                                
-    background: #eee;                                                                                                                                                                           
-    border: 1px solid #aaa;                                                                                                                                                                     
-    padding: 5px 8px; // Slightly smaller padding                                                                                                                                               
-    cursor: pointer;                                                                                                                                                                            
-    font-size: 14px; // Smaller font size                                                                                                                                                       
-    border-radius: 4px;                                                                                                                                                                         
-    position: absolute; // Position it within the state panel                                                                                                                                   
-    bottom: 5px; // Example positioning near the bottom                                                                                                                                         
-    right: 5px;  // Example positioning near the right                                                                                                                                          
-    z-index: 100; // Ensure it's clickable above other elements                                                                                                                                 
-    line-height: 1; // Ensure icon vertical alignment                                                                                                                                           
-                                                                                                                                                                                                
-    &:hover {                                                                                                                                                                                   
-      background: #ddd;                                                                                                                                                                         
-    }                                                                                                                                                                                           
-                                                                                                                                                                                                
-    // Optional: Add transition for smoother hover effect                                                                                                                                       
-    transition: background-color 0.2s ease;                                                                                                                                                     
-  }                                                                                                                                                                                             
-                                                                                                                                                                                                
-  // Dark theme specific style for the button itself (applied via parent .theme-dark class)                                                                                                     
-  :global(.theme-dark) { // Use :global selector if needed, or adjust if theme class is applied differently                                                                                     
-    .themeButton {                                                                                                                                                                              
-      background: #444;                                                                                                                                                                         
-      border-color: #777;                                                                                                                                                                       
-      color: #eee; // Make icon visible                                                                                                                                                         
-                                                                                                                                                                                                
-      &:hover {                                                                                                                                                                                 
-        background: #555;                                                                                                                                                                       
-      }                                                                                                                                                                                         
-    }                                                                                                                                                                                           
-  }                                       
+// Refined styling for the theme switcher button
+.themeButton {
+  background: rgba(255, 255, 255, 0.5); // Semi-transparent light background
+  border: 1px solid rgba(0, 0, 0, 0.2); // Subtle border
+  padding: 3px 6px; // Smaller padding
+  cursor: pointer;
+  font-size: 16px; // Slightly larger icon size
+  border-radius: 5px; // Slightly more rounded
+  position: absolute;
+  bottom: 8px; // Adjusted positioning
+  right: 8px;  // Adjusted positioning
+  z-index: 100;
+  line-height: 1;
+  color: #333; // Default icon color (for light mode)
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1); // Subtle shadow
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.7); // Lighter on hover
+  }
+
+  // Add transition for smoother hover effect
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+// Dark theme specific style for the button itself
+// This targets the button when its ancestor has the .themeDark class
+:global(.themeDark) {
+  .themeButton {
+    background: rgba(80, 80, 80, 0.6); // Semi-transparent dark background
+    border-color: rgba(255, 255, 255, 0.3); // Lighter border for contrast
+    color: #eee; // Light icon color for dark mode
+
+    &:hover {
+      background: rgba(100, 100, 100, 0.8); // Lighter dark on hover
+    }
+  }
+}
   
