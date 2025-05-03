@@ -29,16 +29,18 @@ class App extends React.Component {
       w: document.documentElement.clientWidth,
       h: document.documentElement.clientHeight,
     };
+    // Bind 'this' for the resize method
+    this.resize = this.resize.bind(this);
   }
 
-  resize = () => { // Use arrow function for binding
+  resize() { // Standard class method syntax
     this.setState({
       w: document.documentElement.clientWidth,
       h: document.documentElement.clientHeight,
     });
   }
 
-  componentDidMount() { // Changed from componentWillMount to componentDidMount for listeners
+  componentDidMount() {
     // Add resize listener
     window.addEventListener('resize', this.resize, true);
 
@@ -67,7 +69,7 @@ class App extends React.Component {
     }
   }
 
-  componentWillUnmount() { // Add cleanup for listeners
+  componentWillUnmount() {
     window.removeEventListener('resize', this.resize, true);
     // Remove visibility change listener using the stored reference
     if (this.visibilityListener) {
