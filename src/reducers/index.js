@@ -15,6 +15,7 @@ import reset from './reset';
 import drop from './drop';
 import keyboard from './keyboard';
 import focus from './focus';
+import theme from './theme'; // Import the theme reducer
 
 
 const rootReducer = combineReducers({
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   drop,
   keyboard,
   focus,
+  theme, // Add the theme reducer to the combined state object
 });
 
 export default rootReducer;
