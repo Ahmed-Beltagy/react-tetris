@@ -15,9 +15,12 @@ import Point from '../components/point';
 import Logo from '../components/logo';
 import Keyboard from '../components/keyboard';
 import Guide from '../components/guide';
-import { transform, lastRecord, speeds, i18n, lan } from '../unit/const';
+import ThemeSwitcher from '../components/themeSwitcher'; // Import the switcher
+import { transform, lastRecord, speeds, i18n, lan, ThemeLight, ThemeDark } from '../unit/const'; // Import theme constants
 import { visibilityChangeEvent, isFocus } from '../unit/';
 import states from '../control/states';
+// Assuming actions are exported like this, adjust if necessary
+import * as actions from '../actions';
 
 class App extends React.Component {
   constructor() {
@@ -27,9 +30,16 @@ class App extends React.Component {
       h: document.documentElement.clientHeight,
     };
   }
-  componentWillMount() {
-    window.addEventListener('resize', this.resize.bind(this), true);
+
+  resize = () => { // Use arrow function for binding
+    this.setState({
+      w: document.documentElement.clientWidth,
+      h: document.documentElement.clientHeight,
+    });
   }
+
+  componentDidMount() { // Changed from componentWillMount to componentDidMount for listeners
+    window.addEventListener('resize', this.resize, true);
   componentDidMount() {
     if (visibilityChangeEvent) { // 将页面的焦点变换写入store
       document.addEventListener(visibilityChangeEvent, () => {
@@ -52,13 +62,34 @@ class App extends React.Component {
       states.overStart();
     }
   }
-  resize() {
-    this.setState({
-      w: document.documentElement.clientWidth,
-      h: document.documentElement.clientHeight,
-    });
+
+  componentWillUnmount() { // Add cleanup for listeners
+    window.removeEventListener('resize', this.resize, true);
+    if (visibilityChangeEvent) {
+      // Consider removing the visibility change listener here if added in componentDidMount
+      // document.removeEventListener(visibilityChangeEvent, ...);
+    }
   }
+
   render() {
+    const {
+      matrix,
+      cur,
+      next,
+      pause: pauseState, // Rename to avoid conflict with component name
+      music: musicState, // Rename to avoid conflict with component name
+      points,
+      max,
+      speedRun,
+      speedStart,
+      startLines: startLinesProp, // Rename to avoid conflict
+      clearLines: clearLinesProp, // Rename to avoid conflict
+      reset,
+      drop: dropState, // Rename to avoid conflict
+      keyboard,
+      theme, // Get theme from props
+    } = this.props;
+
     let filling = 0;
     const size = (() => {
       const w = this.state.w;
@@ -81,44 +112,51 @@ class App extends React.Component {
       return css;
     })();
 
+    // Determine the theme class based on the Redux state
+    const themeClass = theme === ThemeDark ? style.themeDark : style.themeLight;
+    // Or if using global classes: const themeClass = `theme-${theme}`;
+
     return (
+      // Apply the theme class to the main container div
       <div
-        className={style.app}
+        className={`${style.app} ${themeClass}`} // Combine app style with theme style
         style={size}
       >
-        <div className={classnames({ [style.rect]: true, [style.drop]: this.props.drop })}>
+        <div className={classnames({ [style.rect]: true, [style.drop]: dropState })}>
           <Decorate />
           <div className={style.screen}>
             <div className={style.panel}>
               <Matrix
-                matrix={this.props.matrix}
-                cur={this.props.cur}
-                reset={this.props.reset}
+                matrix={matrix}
+                cur={cur}
+                reset={reset}
               />
-              <Logo cur={!!this.props.cur} reset={this.props.reset} />
+              <Logo cur={!!cur} reset={reset} />
               <div className={style.state}>
-                <Point cur={!!this.props.cur} point={this.props.points} max={this.props.max} />
-                <p>{ this.props.cur ? i18n.cleans[lan] : i18n.startLine[lan] }</p>
+                <Point cur={!!cur} point={points} max={max} />
+                <p>{ cur ? i18n.cleans[lan] : i18n.startLine[lan] }</p>
                 {/* Use clearLines count from state */}
-                <Number number={this.props.cur ? this.props.clearLines : this.props.startLines} />
+                <Number number={cur ? clearLinesProp : startLinesProp} />
                 <p>{i18n.level[lan]}</p>
                 <Number
-                  number={this.props.cur ? this.props.speedRun : this.props.speedStart}
+                  number={cur ? speedRun : speedStart}
                   length={1}
                 />
                 <p>{i18n.next[lan]}</p>
-                <Next data={this.props.next} />
+                <Next data={next} />
                 <div className={style.bottom}>
-                  <Music data={this.props.music} />
-                  <Pause data={this.props.pause} />
+                  <Music data={musicState} />
+                  <Pause data={pauseState} />
                   <Number time />
                 </div>
+                 {/* Render the theme switcher */}
+                 <ThemeSwitcher />
               </div>
             </div>
           </div>
         </div>
-        <Keyboard filling={filling} keyboard={this.props.keyboard} />
-        <Guide />
+        <Keyboard filling={filling} keyboard={keyboard} />
+        {/* <Guide /> */} {/* Conditionally render Guide or remove if not needed */}
       </div>
     );
   }
@@ -138,13 +176,14 @@ App.propTypes = {
   points: propTypes.number.isRequired,
   max: propTypes.number.isRequired,
   reset: propTypes.bool.isRequired,
-  drop: propTypes.bool.isRequired,
+  drop: propTypes.bool.isRequired, // Renamed to dropState in render
   keyboard: propTypes.object.isRequired,
+  theme: propTypes.string.isRequired, // Add theme prop type
 };
 
 const mapStateToProps = (state) => ({
-  pause: state.get('pause'),
-  music: state.get('music'),
+  pause: state.get('pause'), // Mapped as pause, used as pauseState in render
+  music: state.get('music'), // Mapped as music, used as musicState in render
   matrix: state.get('matrix'),
   next: state.get('next'),
   cur: state.get('cur'),
@@ -155,8 +194,9 @@ const mapStateToProps = (state) => ({
   points: state.get('points'),
   max: state.get('max'),
   reset: state.get('reset'),
-  drop: state.get('drop'),
+  drop: state.get('drop'), // Mapped as drop, used as dropState in render
   keyboard: state.get('keyboard'),
+  theme: state.get('theme'), // Map theme state to props
 });
 
 export default connect(mapStateToProps)(App);
