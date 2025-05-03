@@ -157,13 +157,14 @@ class App extends React.Component {
                   <Pause data={pauseState} />
                   <Number time />
                 </div>
-                {/* Render the theme switcher */}
-                <ThemeSwitcher />
+                {/* Theme switcher moved outside the state panel */}
               </div>
             </div>
           </div>
         </div>
         <Keyboard filling={filling} keyboard={keyboard} />
+        {/* Render the theme switcher outside the main game rectangle */}
+        <ThemeSwitcher />
         {/* <Guide /> */} {/* Conditionally render Guide or remove if not needed */}
       </div>
     );
