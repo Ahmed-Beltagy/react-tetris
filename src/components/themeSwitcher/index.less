@@ -1,0 +1,35 @@
+// Basic styling for the theme switcher button                                                                                                                                                
+.themeButton {                                                                                                                                                                                
+    background: #eee;                                                                                                                                                                           
+    border: 1px solid #aaa;                                                                                                                                                                     
+    padding: 5px 8px; // Slightly smaller padding                                                                                                                                               
+    cursor: pointer;                                                                                                                                                                            
+    font-size: 14px; // Smaller font size                                                                                                                                                       
+    border-radius: 4px;                                                                                                                                                                         
+    position: absolute; // Position it within the state panel                                                                                                                                   
+    bottom: 5px; // Example positioning near the bottom                                                                                                                                         
+    right: 5px;  // Example positioning near the right                                                                                                                                          
+    z-index: 100; // Ensure it's clickable above other elements                                                                                                                                 
+    line-height: 1; // Ensure icon vertical alignment                                                                                                                                           
+                                                                                                                                                                                                
+    &:hover {                                                                                                                                                                                   
+      background: #ddd;                                                                                                                                                                         
+    }                                                                                                                                                                                           
+                                                                                                                                                                                                
+    // Optional: Add transition for smoother hover effect                                                                                                                                       
+    transition: background-color 0.2s ease;                                                                                                                                                     
+  }                                                                                                                                                                                             
+                                                                                                                                                                                                
+  // Dark theme specific style for the button itself (applied via parent .theme-dark class)                                                                                                     
+  :global(.theme-dark) { // Use :global selector if needed, or adjust if theme class is applied differently                                                                                     
+    .themeButton {                                                                                                                                                                              
+      background: #444;                                                                                                                                                                         
+      border-color: #777;                                                                                                                                                                       
+      color: #eee; // Make icon visible                                                                                                                                                         
+                                                                                                                                                                                                
+      &:hover {                                                                                                                                                                                 
+        background: #555;                                                                                                                                                                       
+      }                                                                                                                                                                                         
+    }                                                                                                                                                                                           
+  }                                       
+  
