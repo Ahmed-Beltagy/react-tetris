@@ -1,7 +1,12 @@
 import { getNextType } from '../unit';
-import * as reducerType from '../unit/reducerType';
-import Block from '../unit/block';
-import keyboard from './keyboard';
+import * as reducerType from '../unit/reducerType';                                                                                                                                           
+// Import SET_THEME constant if reducerType doesn't contain it                                                                                                                                
+// If reducerType.js is the intended place for ALL action types, add SET_THEME there instead.                                                                                                 
+// Assuming SET_THEME is defined in const.js for now:                                                                                                                                         
+// import { SET_THEME } from '../unit/const';                                                                                                                                                    
+import Block from '../unit/block';                                                                                                                                                            
+import keyboard from './keyboard';                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                       
 
 function nextBlock(next = getNextType()) {
   return {
@@ -108,6 +113,15 @@ function focus(data) {
   };
 }
 
+// Theme action creator                                                                                                                                                                       
+export function setTheme(theme) {                                                                                                                                                                    
+  // Optional: Add validation here if needed                                                                                                                                                  
+  return {                                                                                                                                                                                    
+    type: reducerType.SET_THEME, // Use the constant from reducerType                                                                                                                         
+    data: theme,                                                                                                                                                                              
+  };                                                                                                                                                                                          
+}      
+
 export default {
   nextBlock,
   moveBlock,
@@ -125,4 +139,5 @@ export default {
   keyboard,
   music,
   focus,
+  setTheme,
 };

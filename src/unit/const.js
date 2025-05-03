@@ -41,6 +41,11 @@ const origin = {
   T: [[0, 0], [1, 0], [-1, 1], [0, -1]],
 };
 
+const ThemeLight = 'light';
+const ThemeDark = 'dark';
+const ThemeStorageKey = 'REACT_TETRIS_THEME';
+// const SET_THEME = 'SET_THEME';
+
 const blockType = Object.keys(blockShape);
 
 const speeds = [800, 650, 500, 370, 250, 160];
@@ -124,4 +129,8 @@ module.exports = {
   transform,
   lan,
   i18n: i18n.data,
+  ThemeLight,
+  ThemeDark,
+  ThemeStorageKey,
+  // SET_THEME,
 };
