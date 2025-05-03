@@ -107,8 +107,11 @@ body{
       }
       // Ensure Number component is visible
       .number {
-         // Add specific styles if Number component needs dark mode adjustments
-         // e.g., color: #eee;
+         color: #eee; // Make Number component text light in dark mode
+      }
+      // Ensure other direct text elements in state are covered
+      > p { // Target direct <p> children of .state
+        color: #ddd;
       }
     }
 

@@ -106,11 +106,13 @@
 }
 
 // Dark Mode Overrides
-:global(.themeDark) {
-  .button {
-    color: #ccc; // Lighter text/icon color for dark mode
+// Target .button when it's inside an element with the themeDark class
+// (CSS Modules turns .themeDark from containers/index.less into a unique class,
+// but :global() can search for ancestors with that unique class)
+:global(.themeDark) .button {
+  color: #ccc; // Lighter text/icon color for dark mode
 
-    &.blue i {
+  &.blue i {
       .background(#4a56a8, #3a4480); // Darker blue gradient
       border-color: #222; // Darker border
       &:before, &:after {
@@ -187,3 +189,4 @@
     }
   }
 }
+// Add newline at end of file if missing
